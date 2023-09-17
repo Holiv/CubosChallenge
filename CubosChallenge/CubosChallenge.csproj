@@ -31,8 +31,12 @@
     <Folder Include="DTOs\" />
     <Folder Include="Extensions\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Controllers\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Core\Core.csproj" />
   </ItemGroup>
