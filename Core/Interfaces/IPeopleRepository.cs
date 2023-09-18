@@ -10,7 +10,9 @@ namespace Core.Interfaces
     public interface IPeopleRepository
     {
         Task AddPersonAsync(Person person);
+        Task<bool> PersonExists(Guid personId);
         Task<IEnumerable<Person>> GetPeopleAsync();
+        Task AddPersonAccountAsync(Guid personId, Account account);
         Task SaveChangesAsync();
     }
 }

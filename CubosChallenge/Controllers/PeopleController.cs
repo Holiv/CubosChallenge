@@ -63,5 +63,41 @@ namespace CubosChallenge.Controllers
             var peopleToReturn = _mapper.Map<IEnumerable<PersonToReturnDTO>>(people);
             return Ok(peopleToReturn);
         }
+
+        [HttpPost]
+        [Route("/{personId}/accounts")]
+        public async Task<ActionResult<AccountToReturnDTO>> CreatePersonAccount(AccountForCreationDTO accountForCreationDTO, Guid personId)
+        {
+            if (!await _peopleRepository.PersonExists(personId))
+                return NotFound(personId);
+            try
+            {
+                if (accountForCreationDTO.Branch.Any(x => char.IsLetter(x)))
+                    throw new ArgumentException(accountForCreationDTO.Branch);
+
+                if (accountForCreationDTO.AccountNumber.Any(x => char.IsLetter(x)))
+                    throw new ArgumentException(accountForCreationDTO.AccountNumber);
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest("Operação invalida, letras não são permitidas. Valor informado: " + ex.Message);
+            }
+           
+
+            var account = _mapper.Map<Account>(accountForCreationDTO);
+
+            try
+            {
+                await _peopleRepository.AddPersonAccountAsync(personId, account);
+                await _peopleRepository.SaveChangesAsync();
+
+                var accountToReturn = _mapper.Map<AccountToReturnDTO>(account);
+                return Ok(accountToReturn);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }
