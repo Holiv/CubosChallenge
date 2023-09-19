@@ -12,6 +12,7 @@ namespace Core.Interfaces
     {
         Task AddPersonAsync(Person person);
         Task<bool> PersonExists(Guid personId);
+        Task<bool> DocumentExistis(string document);
         Task<IEnumerable<Person>> GetPeopleAsync();
         Task<IEnumerable<Account>> GetPersonAccountsAsync(Guid personId);
         Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId, SpecParamsEvaluator pagination); 
