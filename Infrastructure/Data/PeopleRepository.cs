@@ -66,5 +66,11 @@ namespace Infrastructure.Data
                 .Take(pagination.Take)
                 .ToListAsync();
         }
+
+        public async Task<bool> DocumentExistis(string document)
+        {
+            return await _context.Person
+                .AnyAsync(person => person.Document == document);
+        }
     }
 }

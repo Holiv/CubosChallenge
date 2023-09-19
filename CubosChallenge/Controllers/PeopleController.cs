@@ -40,7 +40,9 @@ namespace CubosChallenge.Controllers
             {
                 return BadRequest("O documento informado não é válido: " + personForCreationDTO.Document);
             }
-                
+
+            if (await _peopleRepository.DocumentExistis(personForCreationDTO.Document))
+                return BadRequest("Cadastro para o documento informado ja existente: " + personForCreationDTO.Document);
 
             var person = _mapper.Map<Person>(personForCreationDTO);
             try
