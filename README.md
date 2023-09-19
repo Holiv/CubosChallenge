@@ -396,4 +396,4 @@ Principais pontos da aplicação:
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT - veja o arquivo LICENSE.md para detalhes.
+Este projeto está sob a licença MIT - veja o arquivo [LICENSE.md](https://github.com/Holiv/CubosChallenge/blob/main/LICENSE) para detalhes.
