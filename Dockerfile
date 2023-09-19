@@ -8,6 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["CubosChallenge/CubosChallenge.csproj", "CubosChallenge/"]
+COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
+COPY ["Core/Core.csproj", "Core/"]
 RUN dotnet restore "CubosChallenge/CubosChallenge.csproj"
 COPY . .
 WORKDIR "/src/CubosChallenge"
