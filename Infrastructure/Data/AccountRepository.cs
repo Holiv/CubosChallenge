@@ -47,7 +47,7 @@ namespace Infrastructure.Data
         public async Task<bool> HasPhisicalCard(Guid accountId)
         {
             var account = await GetAccountAsync(accountId);
-            return account.Cards.Any(card => card.Type == "fisico");
+            return account.Cards.Any(card => card.Type == "physical");
         }
 
         public async Task AddTransactionToAccountAsync(Guid accountId, Transaction transaction)
@@ -57,12 +57,21 @@ namespace Infrastructure.Data
             account.Balance += transaction.Value;
         }
 
-        public async Task<IEnumerable<Transaction>> GetAccountTransactionsAsync(Guid accountId, PaginationEvaluator pagination)
+        public async Task<IEnumerable<Transaction>> GetAccountTransactionsAsync(Guid accountId, SpecParamsEvaluator specParams)
         {
             return await _context.Transaction
                 .Where(t => t.AccountId == accountId)
-                .Skip(pagination.Skip)
-                .Take(pagination.Take)
+                .Skip(specParams.Skip)
+                .Take(specParams.Take)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Transaction>> GetAccountTransactionsByDateAsync(Guid accountId, SpecParamsEvaluator specParams, DateTime transactionDate)
+        {
+            return await _context.Transaction
+                .Where(t => t.AccountId == accountId && t.CreatedAt == transactionDate)
+                .Skip(specParams.Skip)
+                .Take(specParams.Take)
                 .ToListAsync();
         }
 
@@ -76,8 +85,9 @@ namespace Infrastructure.Data
 
         public Task<bool> TransactionExists(Guid transactionId)
         {
-            return _context.Account
+            return _context.Transaction
                 .AnyAsync(transaction => transaction.Id == transactionId);
         }
+
     }
 }

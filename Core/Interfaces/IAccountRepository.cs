@@ -15,7 +15,8 @@ namespace Core.Interfaces
         Task AddCardsAccountAsync(Guid accountId, Card card);
         Task AddTransactionToAccountAsync(Guid accountId, Transaction transaction);
         Task<Account?> GetAccountAsync(Guid accountId);
-        Task<IEnumerable<Transaction>> GetAccountTransactionsAsync(Guid accountId, PaginationEvaluator paginationEvaluator);
+        Task<IEnumerable<Transaction>> GetAccountTransactionsAsync(Guid accountId, SpecParamsEvaluator paginationEvaluator);
+        Task<IEnumerable<Transaction>> GetAccountTransactionsByDateAsync(Guid accountId, SpecParamsEvaluator paginationEvaluator, DateTime transactionDate);
         Task<Transaction> GetAccountTransactionAsync(Guid accountId, Guid transactionId);
         Task<bool> HasPhisicalCard(Guid accountId);
         Task SaveChangesAsync();

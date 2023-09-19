@@ -7,9 +7,9 @@ namespace CubosChallenge.DTOs
         public Guid Id { get; private set; }
         public string Branch { get; private set; }
         public string AccountNumber { get; private set; }
+        public ICollection<CardToReturnDTO> Cards { get; set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
-        public ICollection<CardToReturnDTO> Cards { get; set; }
 
         public AccountWithCardsToReturnDTO(Guid id, string branch, string accountNumber, DateTime createdAt, DateTime updatedAt)
         {

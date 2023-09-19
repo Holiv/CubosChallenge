@@ -57,20 +57,12 @@ namespace CubosChallenge.Controllers
             
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PersonToReturnDTO>>> GetPeople()
-        {
-            var people = await _peopleRepository.GetPeopleAsync();
-            var peopleToReturn = _mapper.Map<IEnumerable<PersonToReturnDTO>>(people);
-            return Ok(peopleToReturn);
-        }
-
         [HttpPost]
-        [Route("/{personId}/accounts")]
-        public async Task<ActionResult<AccountToReturnDTO>> CreatePersonAccount(AccountForCreationDTO accountForCreationDTO, Guid personId)
+        [Route("/{peopleId}/accounts")]
+        public async Task<ActionResult<AccountToReturnDTO>> CreatePersonAccount(AccountForCreationDTO accountForCreationDTO, Guid peopleId)
         {
-            if (!await _peopleRepository.PersonExists(personId))
-                return NotFound(personId);
+            if (!await _peopleRepository.PersonExists(peopleId))
+                return NotFound(peopleId);
             try
             {
                 if (accountForCreationDTO.Branch.Any(x => char.IsLetter(x)))
@@ -89,7 +81,7 @@ namespace CubosChallenge.Controllers
 
             try
             {
-                await _peopleRepository.AddPersonAccountAsync(personId, account);
+                await _peopleRepository.AddPersonAccountAsync(peopleId, account);
                 await _peopleRepository.SaveChangesAsync();
 
                 var accountToReturn = _mapper.Map<AccountToReturnDTO>(account);
@@ -99,6 +91,14 @@ namespace CubosChallenge.Controllers
             {
                 return BadRequest(ex);
             }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PersonToReturnDTO>>> GetPeople()
+        {
+            var people = await _peopleRepository.GetPeopleAsync();
+            var peopleToReturn = _mapper.Map<IEnumerable<PersonToReturnDTO>>(people);
+            return Ok(peopleToReturn);
         }
 
         [HttpGet]
@@ -116,12 +116,12 @@ namespace CubosChallenge.Controllers
 
         [HttpGet]
         [Route("/{peopleId}/cards")]
-        public async Task<ActionResult<IEnumerable<CardToReturnDTO>>> GetPersonCards(Guid peopleId, [FromQuery] Pagination paginationParams)
+        public async Task<ActionResult<IEnumerable<CardToReturnDTO>>> GetPersonCards(Guid peopleId, [FromQuery] SpecParams specParams)
         {
             if (!await _peopleRepository.PersonExists(peopleId))
                 return NotFound(peopleId);
 
-            var paginationEvaluator = new PaginationEvaluator(paginationParams);
+            var paginationEvaluator = new SpecParamsEvaluator(specParams);
 
             var cards = await _peopleRepository.GetPersonCardsAsync(peopleId, paginationEvaluator);
             var cardsToReturn = _mapper.Map<IEnumerable<CardToReturnDTO>>(cards);
@@ -131,7 +131,11 @@ namespace CubosChallenge.Controllers
             return Ok(new
             {
                 cards = cardsToReturn,
-                pagination = paginationParams
+                pagination = new
+                {
+                    itemsPerPage = specParams.ItemsPerPage,
+                    currentPage = specParams.CurrentPage
+                }
             });
         }
     }

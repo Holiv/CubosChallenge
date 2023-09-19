@@ -58,7 +58,7 @@ namespace Infrastructure.Data
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId, PaginationEvaluator pagination)
+        public async Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId, SpecParamsEvaluator pagination)
         {
             return await _context.Card
                 .Where(card => card.PersonId == personId)

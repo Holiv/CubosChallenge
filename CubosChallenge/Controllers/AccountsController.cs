@@ -26,7 +26,7 @@ namespace CubosChallenge.Controllers
         public async Task<ActionResult<CardToReturnDTO>> AddCardToAccount(Guid accountId, CardForCreationDTO cardForCreationDTO)
         {
             var hasPhisicalCard = await _accountRepository.HasPhisicalCard(accountId);
-            if (cardForCreationDTO.Type.Equals("fisico") && hasPhisicalCard)
+            if (cardForCreationDTO.Type.Equals("physical") && hasPhisicalCard)
                 return BadRequest("A sua conta ja possui um cartao fisico cadastrado");
 
             try
@@ -37,7 +37,7 @@ namespace CubosChallenge.Controllers
                 if (cardForCreationDTO.Cvv.Any(x => char.IsLetter(x)) || cardForCreationDTO.Cvv.Length != 3)
                     throw new ArgumentException("Operação cancelada, o código de verificação do cartão informado não á válido: " + cardForCreationDTO.Cvv);
 
-                if (!cardForCreationDTO.Type.Contains("fisico") && !cardForCreationDTO.Type.Contains("virtual"))
+                if (!cardForCreationDTO.Type.Contains("physical") && !cardForCreationDTO.Type.Contains("virtual"))
                     throw new ArgumentException("Operação cancelada. Tipo de cartão informado inválido");
             }
             catch(Exception ex)
@@ -96,20 +96,24 @@ namespace CubosChallenge.Controllers
 
         [HttpGet]
         [Route("{accountId}/transaction")]
-        public async Task<ActionResult<IEnumerable<TransactionToReturnDTO>>> GetAccountTransactions(Guid accountId, [FromQuery] Pagination paginationParams)
+        public async Task<ActionResult<IEnumerable<TransactionToReturnDTO>>> GetAccountTransactions(Guid accountId, [FromQuery] SpecParams specParams)
         {
             if (!await _accountRepository.AccountExists(accountId))
                 return BadRequest(accountId);
 
-            var paginationEvaluator = new PaginationEvaluator(paginationParams);
-
-            var transactions = await _accountRepository.GetAccountTransactionsAsync(accountId, paginationEvaluator);
+            var specificationEvaluator = new SpecParamsEvaluator(specParams);
+            
+            var transactions = !specificationEvaluator.HasDateFilter ? await _accountRepository.GetAccountTransactionsAsync(accountId, specificationEvaluator) : await _accountRepository.GetAccountTransactionsByDateAsync(accountId, specificationEvaluator, specParams.TransactionDate);
             var transactionToReturn = _mapper.Map<IEnumerable<TransactionToReturnDTO>>(transactions);
 
             return Ok(new
             {
                 transactions = transactionToReturn,
-                pagination = paginationParams
+                pagination = new
+                {
+                    itemsPerPage = specParams.ItemsPerPage,
+                    currentPage = specParams.CurrentPage
+                }
             });
         }
 
@@ -143,10 +147,9 @@ namespace CubosChallenge.Controllers
             TransactionForCreationDTO transactionForCreation = new()
             {
                 Value = (transaction.Value * -1),
-                Description = description,
-                AccountId = accountId
+                Description = description
             };
-            
+            transactionForCreation.AddAccountId(accountId);
             var revertedTransaction = _mapper.Map<Transaction>(transactionForCreation);
 
             await _accountRepository.AddTransactionToAccountAsync(accountId, revertedTransaction);
