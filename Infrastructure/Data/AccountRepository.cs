@@ -27,6 +27,7 @@ namespace Infrastructure.Data
         {
             return await _context.Account
                 .Include(account => account.Cards)
+                .Include(account => account.Transactions)
                 .Where(account => account.Id == accountId)
                 .FirstOrDefaultAsync();
         }
@@ -60,6 +61,20 @@ namespace Infrastructure.Data
             return await _context.Transaction
                 .Where(t => t.AccountId == accountId)
                 .ToListAsync();
+        }
+
+        public async Task<Transaction> GetAccountTransactionAsync(Guid accountId, Guid transactionId)
+        {
+            var account = await GetAccountAsync(accountId);
+            return account.Transactions
+                .Where(transaction => transaction.Id == transactionId)
+                .FirstOrDefault();
+        }
+
+        public Task<bool> TransactionExists(Guid transactionId)
+        {
+            return _context.Account
+                .AnyAsync(transaction => transaction.Id == transactionId);
         }
     }
 }

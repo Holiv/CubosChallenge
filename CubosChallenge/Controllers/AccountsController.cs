@@ -122,5 +122,32 @@ namespace CubosChallenge.Controllers
             return Ok(balance);
         }
 
+        [HttpPost]
+        [Route("{accountId}/transactions/{transactionId}/revert")]
+        public async Task<ActionResult<TransactionToReturnDTO>> RevertTransaction(Guid accountId, Guid transactionId, string description)
+        {
+            if (!await _accountRepository.AccountExists(accountId))
+                return BadRequest(accountId);
+
+            if (!await _accountRepository.TransactionExists(transactionId))
+                return BadRequest(transactionId);
+
+            var transaction = await _accountRepository.GetAccountTransactionAsync(accountId, transactionId);
+            TransactionForCreationDTO transactionForCreation = new()
+            {
+                Value = (transaction.Value * -1),
+                Description = description,
+                AccountId = accountId
+            };
+            
+            var revertedTransaction = _mapper.Map<Transaction>(transactionForCreation);
+
+            await _accountRepository.AddTransactionToAccountAsync(accountId, revertedTransaction);
+            await _accountRepository.SaveChangesAsync();
+
+            var transactionToReturn = _mapper.Map<TransactionToReturnDTO>(revertedTransaction);
+            return Ok(transactionToReturn);
+        }
+
     }
 }
