@@ -99,5 +99,33 @@ namespace CubosChallenge.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet]
+        [Route("/{peopleId}/accounts")]
+        public async Task<ActionResult<IEnumerable<AccountToReturnDTO>>> GetPersonAccounts(Guid peopleId)
+        {
+            if(!await _peopleRepository.PersonExists(peopleId))
+                return NotFound(peopleId);
+
+            var accounts = await _peopleRepository.GetPersonAccountsAsync(peopleId);
+            var accountsToReturn = _mapper.Map<IEnumerable<AccountToReturnDTO>>(accounts);
+
+            return Ok(accountsToReturn);
+        }
+
+        [HttpGet]
+        [Route("/{peopleId}/cards")]
+        public async Task<ActionResult<IEnumerable<CardToReturnDTO>>> GetPersonCards(Guid peopleId)
+        {
+            if (!await _peopleRepository.PersonExists(peopleId))
+                return NotFound(peopleId);
+
+            var cards = await _peopleRepository.GetPersonCardsAsync(peopleId);
+            var cardsToReturn = _mapper.Map<IEnumerable<CardToReturnDTO>>(cards);
+
+            //Adicionar Paginacao e retornar objecto com duas propriedades, sendo a 1 a lista de cardsToReturn e a 2 os dados da paginacao.
+
+            return Ok(cardsToReturn);
+        }
     }
 }

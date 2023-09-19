@@ -7,19 +7,13 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class Card : BaseEntity
+    public class Transaction : BaseEntity
     {
-        public string Type { get; set; }
-        public string Number { get; set; }
-        public string Cvv { get; set; }
+        public double Value { get; set; }
+        public string Description { get; set; }
 
-
-        //public Account? Account { get; set; }
         [ForeignKey("AccountId")]
         public Guid AccountId { get; set; }
-        
-        [ForeignKey("PersonId")]
-        public Guid PersonId { get; set; }
 
     }
 }

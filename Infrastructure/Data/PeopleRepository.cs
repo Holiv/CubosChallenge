@@ -49,5 +49,19 @@ namespace Infrastructure.Data
         {
             return await _context.Person.AnyAsync(p => p.Id == personId);
         }
+
+        public async Task<IEnumerable<Account>> GetPersonAccountsAsync(Guid personId)
+        {
+            return await _context.Account
+                .Where(account => account.PersonId == personId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId)
+        {
+            return await _context.Card
+                .Where(card => card.PersonId == personId)
+                .ToListAsync();
+        }
     }
 }

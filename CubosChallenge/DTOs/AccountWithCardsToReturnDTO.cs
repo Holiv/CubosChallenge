@@ -1,14 +1,17 @@
-﻿namespace CubosChallenge.DTOs
+﻿using Core.Entities;
+
+namespace CubosChallenge.DTOs
 {
-    public class AccountToReturnDTO
+    public class AccountWithCardsToReturnDTO
     {
         public Guid Id { get; private set; }
         public string Branch { get; private set; }
         public string AccountNumber { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
+        public ICollection<CardToReturnDTO> Cards { get; set; }
 
-        public AccountToReturnDTO(Guid id, string branch, string accountNumber, DateTime createdAt, DateTime updatedAt)
+        public AccountWithCardsToReturnDTO(Guid id, string branch, string accountNumber, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
             Branch = branch;

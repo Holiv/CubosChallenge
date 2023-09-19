@@ -13,6 +13,7 @@ namespace Core.Entities
         public string AccountNumber { get; set; }
         public double Balance { get; set; }
         public ICollection<Card> Cards { get; set; } = new List<Card>();
+        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         [ForeignKey("PersonId")]
         public Person? Person { get; set; }

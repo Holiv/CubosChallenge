@@ -26,5 +26,6 @@ namespace Infrastructure.Data
         public DbSet<Person> Person { get; set; }
         public DbSet<Account> Account { get; set; }
         public DbSet<Card> Card { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
     }
 }

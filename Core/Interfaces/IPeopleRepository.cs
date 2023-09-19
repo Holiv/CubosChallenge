@@ -12,6 +12,8 @@ namespace Core.Interfaces
         Task AddPersonAsync(Person person);
         Task<bool> PersonExists(Guid personId);
         Task<IEnumerable<Person>> GetPeopleAsync();
+        Task<IEnumerable<Account>> GetPersonAccountsAsync(Guid personId);
+        Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId); 
         Task AddPersonAccountAsync(Guid personId, Account account);
         Task SaveChangesAsync();
     }
