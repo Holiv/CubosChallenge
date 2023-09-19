@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using Core.SpecificationParams;
 using CubosChallenge.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -95,15 +96,21 @@ namespace CubosChallenge.Controllers
 
         [HttpGet]
         [Route("{accountId}/transaction")]
-        public async Task<ActionResult<IEnumerable<TransactionToReturnDTO>>> GetAccountTransactions(Guid accountId)
+        public async Task<ActionResult<IEnumerable<TransactionToReturnDTO>>> GetAccountTransactions(Guid accountId, [FromQuery] Pagination paginationParams)
         {
             if (!await _accountRepository.AccountExists(accountId))
                 return BadRequest(accountId);
 
-            var transactions = await _accountRepository.GetAccountTransactionsAsync(accountId);
+            var paginationEvaluator = new PaginationEvaluator(paginationParams);
+
+            var transactions = await _accountRepository.GetAccountTransactionsAsync(accountId, paginationEvaluator);
             var transactionToReturn = _mapper.Map<IEnumerable<TransactionToReturnDTO>>(transactions);
 
-            return Ok(transactionToReturn);
+            return Ok(new
+            {
+                transactions = transactionToReturn,
+                pagination = paginationParams
+            });
         }
 
         [HttpGet]

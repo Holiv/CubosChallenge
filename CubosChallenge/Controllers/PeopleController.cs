@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using Core.SpecificationParams;
 using CubosChallenge.DTOs;
 using CubosChallenge.Helpers;
 using Microsoft.AspNetCore.Http;
@@ -115,17 +116,23 @@ namespace CubosChallenge.Controllers
 
         [HttpGet]
         [Route("/{peopleId}/cards")]
-        public async Task<ActionResult<IEnumerable<CardToReturnDTO>>> GetPersonCards(Guid peopleId)
+        public async Task<ActionResult<IEnumerable<CardToReturnDTO>>> GetPersonCards(Guid peopleId, [FromQuery] Pagination paginationParams)
         {
             if (!await _peopleRepository.PersonExists(peopleId))
                 return NotFound(peopleId);
 
-            var cards = await _peopleRepository.GetPersonCardsAsync(peopleId);
+            var paginationEvaluator = new PaginationEvaluator(paginationParams);
+
+            var cards = await _peopleRepository.GetPersonCardsAsync(peopleId, paginationEvaluator);
             var cardsToReturn = _mapper.Map<IEnumerable<CardToReturnDTO>>(cards);
 
             //Adicionar Paginacao e retornar objecto com duas propriedades, sendo a 1 a lista de cardsToReturn e a 2 os dados da paginacao.
 
-            return Ok(cardsToReturn);
+            return Ok(new
+            {
+                cards = cardsToReturn,
+                pagination = paginationParams
+            });
         }
     }
 }

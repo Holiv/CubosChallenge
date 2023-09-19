@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.SpecificationParams;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Core.Interfaces
         Task<bool> PersonExists(Guid personId);
         Task<IEnumerable<Person>> GetPeopleAsync();
         Task<IEnumerable<Account>> GetPersonAccountsAsync(Guid personId);
-        Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId); 
+        Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId, PaginationEvaluator pagination); 
         Task AddPersonAccountAsync(Guid personId, Account account);
         Task SaveChangesAsync();
     }

@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Core.SpecificationParams;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -56,10 +57,12 @@ namespace Infrastructure.Data
             account.Balance += transaction.Value;
         }
 
-        public async Task<IEnumerable<Transaction>> GetAccountTransactionsAsync(Guid accountId)
+        public async Task<IEnumerable<Transaction>> GetAccountTransactionsAsync(Guid accountId, PaginationEvaluator pagination)
         {
             return await _context.Transaction
                 .Where(t => t.AccountId == accountId)
+                .Skip(pagination.Skip)
+                .Take(pagination.Take)
                 .ToListAsync();
         }
 

@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Core.SpecificationParams;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -57,10 +58,12 @@ namespace Infrastructure.Data
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId)
+        public async Task<IEnumerable<Card>> GetPersonCardsAsync(Guid personId, PaginationEvaluator pagination)
         {
             return await _context.Card
                 .Where(card => card.PersonId == personId)
+                .Skip(pagination.Skip)
+                .Take(pagination.Take)
                 .ToListAsync();
         }
     }
