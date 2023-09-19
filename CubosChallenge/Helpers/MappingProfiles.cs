@@ -10,6 +10,13 @@ namespace CubosChallenge.Helpers
         {
             CreateMap<PersonForCreationDTO, Person>();
             CreateMap<Person, PersonToReturnDTO>();
+            CreateMap<AccountForCreationDTO, Account>();
+            CreateMap<Account, AccountToReturnDTO>();
+            CreateMap<Card, CardToReturnDTO>();
+            CreateMap<CardForCreationDTO, Card>();
+            CreateMap<Account, AccountWithCardsToReturnDTO>();
+            CreateMap<TransactionForCreationDTO, Transaction>();
+            CreateMap<Transaction, TransactionToReturnDTO>();
         }
     }
 }

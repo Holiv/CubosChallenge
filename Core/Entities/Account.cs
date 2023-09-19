@@ -9,10 +9,11 @@ namespace Core.Entities
 {
     public class Account : BaseEntity
     {
-        public int Branch { get; set; }
-        public long AccountNumber { get; set; }
+        public string Branch { get; set; }
+        public string AccountNumber { get; set; }
         public double Balance { get; set; }
         public ICollection<Card> Cards { get; set; } = new List<Card>();
+        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         [ForeignKey("PersonId")]
         public Person? Person { get; set; }

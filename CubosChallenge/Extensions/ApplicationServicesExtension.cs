@@ -12,6 +12,7 @@ namespace CubosChallenge.Extensions
             services.AddSwaggerGen();
             services.AddDbContext<FinServicesContext>();
             services.AddScoped<IPeopleRepository, PeopleRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             return services;

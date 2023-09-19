@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(FinServicesContext))]
-    partial class FinServicesContextModelSnapshot : ModelSnapshot
+    [Migration("20230918222011_ThirdMigration")]
+    partial class ThirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,9 +78,6 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
@@ -122,35 +122,6 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Person");
                 });
 
-            modelBuilder.Entity("Core.Entities.Transaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("Transaction");
-                });
-
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
                     b.HasOne("Core.Entities.Person", "Person")
@@ -164,27 +135,18 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Card", b =>
                 {
-                    b.HasOne("Core.Entities.Account", null)
+                    b.HasOne("Core.Entities.Account", "Account")
                         .WithMany("Cards")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Core.Entities.Transaction", b =>
-                {
-                    b.HasOne("Core.Entities.Account", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Core.Entities.Account", b =>
                 {
                     b.Navigation("Cards");
-
-                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("Core.Entities.Person", b =>
