@@ -72,7 +72,7 @@ namespace CubosChallenge.Controllers
         }
 
         [HttpPost]
-        [Route("{accountId}/transaction")]
+        [Route("{accountId}/transactions")]
         public async Task<ActionResult<TransactionToReturnDTO>> PerformTransaction(Guid accountId, TransactionForCreationDTO transactionForCreationDTO)
         {
             if (!await _accountRepository.AccountExists(accountId))
@@ -95,7 +95,7 @@ namespace CubosChallenge.Controllers
         }
 
         [HttpGet]
-        [Route("{accountId}/transaction")]
+        [Route("{accountId}/transactions")]
         public async Task<ActionResult<IEnumerable<TransactionToReturnDTO>>> GetAccountTransactions(Guid accountId, [FromQuery] SpecParams specParams)
         {
             if (!await _accountRepository.AccountExists(accountId))
