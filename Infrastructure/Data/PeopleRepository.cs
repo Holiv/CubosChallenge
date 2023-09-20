@@ -23,7 +23,7 @@ namespace Infrastructure.Data
             await _context.Person.AddAsync(person);
         }
 
-        public async Task<Person?> GetPersonAsync(Guid personId)
+        public async Task<Person> GetPersonAsync(Guid personId)
         {
             return await _context.Person
                 .Include(p => p.Accounts)
