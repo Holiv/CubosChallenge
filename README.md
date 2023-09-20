@@ -364,9 +364,7 @@ Principais pontos da aplicação:
 - Request:
 
 ```javascript
-{
-     "description": "Estorno por devolução de produto"
-}
+    "Texto de descrição enviado no body da requisição"
 ```
 
 - Response: Status200Ok

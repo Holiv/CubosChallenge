@@ -135,7 +135,7 @@ namespace CubosChallenge.Controllers
 
         [HttpPost]
         [Route("{accountId}/transactions/{transactionId}/revert")]
-        public async Task<ActionResult<TransactionToReturnDTO>> RevertTransaction(Guid accountId, Guid transactionId, string description)
+        public async Task<ActionResult<TransactionToReturnDTO>> RevertTransaction(Guid accountId, Guid transactionId, [FromBody] string description)
         {
             if (!await _accountRepository.AccountExists(accountId))
                 return BadRequest(accountId);
