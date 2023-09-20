@@ -104,6 +104,13 @@ namespace CubosChallenge.Controllers
         }
 
         [HttpGet]
+        [Route("teste")]
+        public ActionResult<string> Teste()
+        {
+            return Ok("TESTANDO APLICAÇÃO");
+        }
+
+        [HttpGet]
         [Route("/{peopleId}/accounts")]
         public async Task<ActionResult<IEnumerable<AccountToReturnDTO>>> GetPersonAccounts(Guid peopleId)
         {

@@ -18,16 +18,16 @@ Principais pontos da aplicação:
 - Possuir Docker instalado
 - Postman para testar os endpoints
 - Conexão com a internet
-- Estar com as Portas `3030` e `8080` livres para serem usadas pela aplicação
+- Estar com as Portas `8081` e `5432` livres para serem usadas pela aplicação e banco de dados respectivamente
 
 ## 🎮 Executando
 
-> Clonar o repositório é opcional e fazer download de todos os arquivos é opcional
+> Clone o repositório para sua máquina e execute os seguites passos:
 
-- Faça o Download do arquivo `docker-compose.yml`
-- No terminal onde o arquivo foi salvo execute o comando:
-  - `docker compose up`
-- Testar endpoints utilizando `localhost:3030`
+- Abra um terminal no diretório do arquivo `docker-compose.yml`
+- execute o comando:
+  - `docker compose up -d`
+- Testar endpoints utilizando `localhost:8081`
 
 ## 💻 Funcionalidades
 
