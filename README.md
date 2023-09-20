@@ -70,7 +70,7 @@ Principais pontos da aplicação:
    ```javascript
    {
         "branch": "001",
-        "account": "2033392-5"
+        "accountNumber": "2033392-5"
    }
    ```
 

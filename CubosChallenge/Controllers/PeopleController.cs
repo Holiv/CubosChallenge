@@ -60,7 +60,7 @@ namespace CubosChallenge.Controllers
         }
 
         [HttpPost]
-        [Route("/{peopleId}/accounts")]
+        [Route("{peopleId}/accounts")]
         public async Task<ActionResult<AccountToReturnDTO>> CreatePersonAccount(AccountForCreationDTO accountForCreationDTO, Guid peopleId)
         {
             if (!await _peopleRepository.PersonExists(peopleId))
@@ -104,14 +104,7 @@ namespace CubosChallenge.Controllers
         }
 
         [HttpGet]
-        [Route("teste")]
-        public ActionResult<string> Teste()
-        {
-            return Ok("TESTANDO APLICAÇÃO");
-        }
-
-        [HttpGet]
-        [Route("/{peopleId}/accounts")]
+        [Route("{peopleId}/accounts")]
         public async Task<ActionResult<IEnumerable<AccountToReturnDTO>>> GetPersonAccounts(Guid peopleId)
         {
             if(!await _peopleRepository.PersonExists(peopleId))
@@ -124,7 +117,7 @@ namespace CubosChallenge.Controllers
         }
 
         [HttpGet]
-        [Route("/{peopleId}/cards")]
+        [Route("{peopleId}/cards")]
         public async Task<ActionResult<IEnumerable<CardToReturnDTO>>> GetPersonCards(Guid peopleId, [FromQuery] SpecParams specParams)
         {
             if (!await _peopleRepository.PersonExists(peopleId))
